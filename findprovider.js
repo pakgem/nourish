@@ -14,7 +14,7 @@ $(document).ready(function () {
       // Toggle the class .w--redirected-checked on the child element
       checkboxInput.toggleClass("w--redirected-checked");
     });
-  }, 2000);
+  }, 1000);
 });
 
 $("input[filter-button]").click(function () {
