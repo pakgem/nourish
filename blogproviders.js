@@ -11,8 +11,6 @@ $(document).ready(function () {
 function disableCal(currentElement) {
   currentElement.find(".blog-providers_time").hide();
   currentElement.find(".calendar_noavail-wrap").show();
-  // Disable click event listeners for calendar next/prev
-
   $("#get-touch-cta").css("opacity", 1);
 }
 
