@@ -33,6 +33,7 @@ providerSearchInput.addEventListener("input", function (event) {
     showHideCommas();
     showMoreTags();
     postnomReorder();
+    updateSpecialty();
   }, 500);
 });
 
