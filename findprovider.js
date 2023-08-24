@@ -10,11 +10,30 @@ $(document).ready(function () {
     $(".filter-list_input-group-parent").on("click", function () {
       // Find the child .w-checkbox-input element
       var checkboxInput = $(this).find(".w-checkbox-input");
-
-      // Toggle the class .w--redirected-checked on the child element
       checkboxInput.toggleClass("w--redirected-checked");
     });
   }, 1000);
+});
+
+$(".pagination").click(function () {
+  setTimeout(function () {
+    updatePageArrows();
+    showMoreTags();
+    scrollAnchor();
+    postnomReorder();
+  }, 200);
+});
+
+// Set event listener for search input
+var providerSearchInput = document.querySelector(".provider-filter_search");
+providerSearchInput.addEventListener("input", function (event) {
+  setTimeout(function () {
+    updateTotalCount();
+    showInsuranceWrapper();
+    showHideCommas();
+    showMoreTags();
+    postnomReorder();
+  }, 500);
 });
 
 $("input[filter-button]").click(function () {
@@ -128,6 +147,9 @@ function updateSpecialty() {
   var dropdownList = document.getElementById("w-dropdown-list-2");
   var activeElement = dropdownList.querySelector(".fs-cmsfilter_active");
   var elements = document.getElementsByClassName("provider-list_specialty");
+  var searchValue = document.getElementById("provider-search").value;
+  var tags = document.querySelectorAll(".provider-list_tags-wrapper > *");
+  var containsSearchValue = false;
 
   if (activeElement) {
     for (var i = 0; i < elements.length; i++) {
@@ -137,6 +159,18 @@ function updateSpecialty() {
     for (var i = 0; i < elements.length; i++) {
       elements[i].style.opacity = "1";
     }
+  }
+
+  tags.forEach(function (tag) {
+    if (tag.textContent.includes(searchValue)) {
+      containsSearchValue = true;
+    }
+  });
+
+  if (containsSearchValue) {
+    dropdownList.classList.add("fs-cmsfilter_active");
+  } else {
+    dropdownList.classList.remove("fs-cmsfilter_active");
   }
 }
 
@@ -210,18 +244,6 @@ filter.forEach(function (dropdown) {
   });
 });
 
-// Set event listener for search input
-var providerSearchInput = document.querySelector(".provider-filter_search");
-providerSearchInput.addEventListener("input", function (event) {
-  setTimeout(function () {
-    updateTotalCount();
-    showInsuranceWrapper();
-    showHideCommas();
-    showMoreTags();
-    postnomReorder();
-  }, 500);
-});
-
 // Set event listener for styles
 const specialtyField = document.querySelectorAll(
   ".filter-list_input-group.specialty"
@@ -242,15 +264,6 @@ styleField.forEach(function (field) {
       updateStyle();
     }, 500);
   });
-});
-
-$(".pagination").click(function () {
-  setTimeout(function () {
-    updatePageArrows();
-    showMoreTags();
-    scrollAnchor();
-    postnomReorder();
-  }, 200);
 });
 
 function showMoreTags() {
