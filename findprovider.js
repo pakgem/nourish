@@ -12,16 +12,27 @@ $(document).ready(function () {
       var checkboxInput = $(this).find(".w-checkbox-input");
       checkboxInput.toggleClass("w--redirected-checked");
     });
-  }, 1000);
+  }, 2000);
 });
 
-$(".pagination").click(function () {
-  setTimeout(function () {
-    updatePageArrows();
-    showMoreTags();
-    scrollAnchor();
-    postnomReorder();
-  }, 200);
+$("input[filter-button]").click(function () {
+  var value = $(this).attr("filter-button");
+  $("#" + value).trigger("w-close");
+});
+
+// Set event listener for all dropdown boxes
+const filter = document.querySelectorAll(".filter-list_input-group");
+filter.forEach(function (dropdown) {
+  dropdown.addEventListener("click", function () {
+    setTimeout(function () {
+      updateTotalCount();
+      showInsuranceWrapper();
+      showHideCommas();
+      showMoreTags();
+      postnomReorder();
+      updateSpecialty();
+    }, 500);
+  });
 });
 
 // Set event listener for search input
@@ -37,9 +48,36 @@ providerSearchInput.addEventListener("input", function (event) {
   }, 500);
 });
 
-$("input[filter-button]").click(function () {
-  var value = $(this).attr("filter-button");
-  $("#" + value).trigger("w-close");
+// Set event listener for specialty
+const specialtyField = document.querySelectorAll(
+  ".filter-list_input-group.specialty"
+);
+specialtyField.forEach(function (field) {
+  field.addEventListener("click", function () {
+    setTimeout(function () {
+      updateSpecialty();
+    }, 500);
+  });
+});
+
+// Set event listener for style
+const styleField = document.querySelectorAll(".filter-list_input-group.style");
+styleField.forEach(function (field) {
+  field.addEventListener("click", function () {
+    setTimeout(function () {
+      updateStyle();
+    }, 500);
+  });
+});
+
+// On pageination click
+$(".pagination").click(function () {
+  setTimeout(function () {
+    updatePageArrows();
+    showMoreTags();
+    scrollAnchor();
+    postnomReorder();
+  }, 200);
 });
 
 function postnomReorder() {
@@ -146,32 +184,22 @@ function showHideCommas() {
 // Update styles of specialty category card
 function updateSpecialty() {
   var dropdownList = document.getElementById("w-dropdown-list-2");
+  // See if active element exists in dropdown
   var activeElement = dropdownList.querySelector(".fs-cmsfilter_active");
-  var elements = document.getElementsByClassName("provider-list_specialty");
-  var searchValue = document.getElementById("provider-search").value;
-  var tags = document.querySelectorAll(".provider-list_tags-wrapper > *");
-  var containsSearchValue = false;
+  var providerSearchInputValue = document
+    .querySelector(".provider-filter_search")
+    .value.toLowerCase();
 
-  if (activeElement) {
+  var elements = document.getElementsByClassName("provider-list_specialty");
+
+  if (activeElement || providerSearchInputValue) {
     for (var i = 0; i < elements.length; i++) {
-      elements[i].style.opacity = "0.5";
+      elements[i].style.opacity = ".5";
     }
   } else {
     for (var i = 0; i < elements.length; i++) {
       elements[i].style.opacity = "1";
     }
-  }
-
-  tags.forEach(function (tag) {
-    if (tag.textContent.includes(searchValue)) {
-      containsSearchValue = true;
-    }
-  });
-
-  if (containsSearchValue) {
-    dropdownList.classList.add("fs-cmsfilter_active");
-  } else {
-    dropdownList.classList.remove("fs-cmsfilter_active");
   }
 }
 
@@ -230,42 +258,6 @@ function updatePageArrows() {
     $(".previous").addClass("active");
   }
 }
-
-// Set event listener for all dropdown boxes
-const filter = document.querySelectorAll(".filter-list_input-group");
-filter.forEach(function (dropdown) {
-  dropdown.addEventListener("click", function () {
-    setTimeout(function () {
-      updateTotalCount();
-      showInsuranceWrapper();
-      showHideCommas();
-      showMoreTags();
-      postnomReorder();
-    }, 500);
-  });
-});
-
-// Set event listener for styles
-const specialtyField = document.querySelectorAll(
-  ".filter-list_input-group.specialty"
-);
-specialtyField.forEach(function (field) {
-  field.addEventListener("click", function () {
-    setTimeout(function () {
-      updateSpecialty();
-    }, 500);
-  });
-});
-
-// Set event listener for specialty
-const styleField = document.querySelectorAll(".filter-list_input-group.style");
-styleField.forEach(function (field) {
-  field.addEventListener("click", function () {
-    setTimeout(function () {
-      updateStyle();
-    }, 500);
-  });
-});
 
 function showMoreTags() {
   if ($(window).width() > 768) {
